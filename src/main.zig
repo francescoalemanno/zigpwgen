@@ -63,7 +63,7 @@ fn genfrompattern(rand: std.Random, writer: anytype, pattern: []const u8) !void 
             continue;
         }
         if (c == 'w' or c == 't' or c == 'T' or c == 'W') {
-            inline for (0..3) |j| {
+            for (0..3) |j| {
                 const next = sample_next_token(rand, &mem.buf);
                 mem.write(next);
                 if (j == 0 and is_uppercase(c)) {
@@ -77,7 +77,7 @@ fn genfrompattern(rand: std.Random, writer: anytype, pattern: []const u8) !void 
                 } else {
                     try writer.writeAll(next);
                 }
-                if (c == 't') break;
+                if (c == 't' or c == 'T') break;
             }
         } else if (c == 's' or c == 'd') {
             const symbs = if (c == 's') "!$%&/=?^#*+@;>|:" else "1234567890";
