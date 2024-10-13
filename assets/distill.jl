@@ -1,3 +1,5 @@
+# Julia script that turns a word list into a Zig StaticStringMap
+
 words = split(readline("assets/eff.txt"),";")
 depth = 2
 data = Dict{String,Set{String}}()
@@ -21,9 +23,12 @@ V = [(k, join(filter(!=(""),collect(v)|>sort),";")) for (k,v) in data]
 V = V[sortperm(V)]
 open("src/lib.zig", "w") do io 
 println(io,"const std = @import(\"std\");
-pub const map = std.StaticStringMap([]const u8).initComptime(.{")
+const string = []const u8;
+pub const map = std.StaticStringMap([]const string).initComptime(.{")
 for v in V
-    println(io,".{\"",v[1],"\"",", \";",v[2],";\"},")
+    toks = split(v[2],";");
+    jt = "\""*join(toks,"\", \"")*"\""
+    println(io,"   .{\"$(v[1])\", &[_]string{$(jt)}},")
 end
 println(io,"});
 ")

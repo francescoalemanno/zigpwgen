@@ -1,34 +1,25 @@
 const std = @import("std");
-const map = @import("lib.zig").map;
-const dbg = std.debug.print;
+const lib = @import("lib.zig");
+const map = lib.map;
+const string = lib.string;
 
 fn sample_next_token(rand: std.Random, seed: []const u8) []const u8 {
     var tok = seed[0..];
-    var next = map.get(tok) orelse "";
-    while (next.len == 0) {
+    var next = map.get(tok);
+    while (next == null) {
         if (tok.len == 0) {
             return "";
         }
         tok = tok[1..];
-        next = map.get(tok) orelse "";
+        next = map.get(tok);
     }
-    var idx: usize = 0;
-    while (next[idx] == ';') {
-        idx = rand.intRangeLessThan(usize, 1, next.len - 1);
-    }
-    var f = idx;
-    while (next[f] != ';') {
-        f -= 1;
-    }
-    var e = idx;
-    while (next[e] != ';') {
-        e += 1;
-    }
-    return next[f + 1 .. e];
+
+    const tokens = next.?;
+    return tokens[rand.uintLessThan(usize, tokens.len)];
 }
 
 fn sample_symb(rand: std.Random, symbols: []const u8) u8 {
-    return symbols[rand.intRangeLessThan(usize, 0, symbols.len)];
+    return symbols[rand.uintLessThan(usize, symbols.len)];
 }
 
 fn is_uppercase(c: u8) bool {
@@ -121,7 +112,7 @@ pub fn main() !void {
                 p = ps;
             }
         } else if (std.mem.eql(u8, arg, "-h") or std.mem.eql(u8, arg, "--help")) {
-            dbg(
+            try stdout.print(
                 \\Usage: zigpwgen [-p <pattern>] [-n <num>]
                 \\
                 \\Flexible password generator with pronounceable words based on EFF long word list and Zig.
@@ -135,6 +126,7 @@ pub fn main() !void {
                 \\  --help            display usage information
                 \\            
             , .{});
+            try bw.flush();
             return;
         }
     }
