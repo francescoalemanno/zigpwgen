@@ -47,12 +47,12 @@ Example:
 
 Output:
 
-otaton.equand.ailbum.andsma
-aerain.lyriss.pholes.xerpath
-umastu.sclote.coulbe.mysect
+xerock.ozealba.thosai.demisw
+lygory.yummog.hewarf.aracor
+fretyle.muttac.myspia.tanypl
 
 -----------------------------------------------------------------------------------------
-author: Francesco Alemanno <francescolemanno710@gmail.com>
+author: Francesco Alemanno <francesco.alemanno.710@gmail.com>
 repo:   https://github.com/francescoalemanno/zigpwgen
 ```
 

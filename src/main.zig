@@ -50,7 +50,7 @@ pub fn format_help(writer: anytype) !void {
     try std.fmt.format(writer,
         \\
         \\-----------------------------------------------------------------------------------------
-        \\author: Francesco Alemanno <francescolemanno710@gmail.com>
+        \\author: Francesco Alemanno <francesco.alemanno.710@gmail.com>
         \\repo:   https://github.com/francescoalemanno/zigpwgen
         \\
     , .{});
