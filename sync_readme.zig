@@ -20,6 +20,8 @@ pub fn main() !void {
         \\zig build -Doptimize=ReleaseFast
         \\```
         \\
+        \\or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/{s}).
+        \\
         \\## Usage
         \\
         \\### Command Syntax
@@ -37,13 +39,14 @@ pub fn main() !void {
         \\Copyright (c) 2024 Francesco Alemanno
         \\
     ;
+    const main_prog = @import("src/main.zig");
     var buf: [100000]u8 = undefined;
     var alloc = std.heap.FixedBufferAllocator.init(&buf);
     var alist = std.ArrayList(u8).init(alloc.allocator());
 
     const out = alist.writer();
-    out.writeAll(beg_readme) catch unreachable;
-    @import("src/main.zig").format_help(out) catch unreachable;
+    out.print(beg_readme, .{main_prog.VERSION}) catch unreachable;
+    main_prog.format_help(out) catch unreachable;
     out.writeAll(beg_end) catch unreachable;
 
     const file = try std.fs.cwd().createFile(

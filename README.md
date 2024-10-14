@@ -17,6 +17,8 @@ cd zigpwgen
 zig build -Doptimize=ReleaseFast
 ```
 
+or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.4).
+
 ## Usage
 
 ### Command Syntax
@@ -45,9 +47,9 @@ Example:
 
 Output:
 
-krooll.knifyes.ilwage.ecimum
-aftiga.faried.urremb.dashin
-ovalth.kimpon.stinsi.grogic
+otaton.equand.ailbum.andsma
+aerain.lyriss.pholes.xerpath
+umastu.sclote.coulbe.mysect
 
 -----------------------------------------------------------------------------------------
 author: Francesco Alemanno <francescolemanno710@gmail.com>
