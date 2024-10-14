@@ -17,7 +17,7 @@ cd zigpwgen
 zig build -Doptimize=ReleaseFast
 ```
 
-or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.4).
+or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.5).
 
 ## Usage
 
@@ -47,9 +47,9 @@ Example:
 
 Output:
 
-xerock.ozealba.thosai.demisw
-lygory.yummog.hewarf.aracor
-fretyle.muttac.myspia.tanypl
+joyles.ibupto.udiocy.gonymak
+igglegw.feript.sprock.ahoyag
+avestf.agragr.yongruf.uditmu
 
 -----------------------------------------------------------------------------------------
 author: Francesco Alemanno <francesco.alemanno.710@gmail.com>

@@ -4,7 +4,7 @@ const default_pattern = "W-w-w-w-ds";
 const default_print_entropy = false;
 const default_number_of_passwords = 5;
 const string = []const u8;
-pub const VERSION = "v0.0.4";
+pub const VERSION = "v0.0.5";
 fn run_main(stdout: anytype, number_of_passwords: usize, pattern: string, print_entropy: bool) !void {
     //Prepare CSPRNG
     var seed = [1]u8{0} ** std.Random.ChaCha.secret_seed_length;
