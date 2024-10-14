@@ -37,11 +37,21 @@ Options:
   -e, --entropy     print entropy in base log2 along with the generated password,
                     defaults to false.
                     
-  --help            display usage information
+  -h, --help        display usage information
+  -v, --version     display version information
 
-  -----------------------------------------------------------------------------------------
-  author: Francesco Alemanno <francescolemanno710@gmail.com>.
-  repo:   https://github.com/francescoalemanno/zigpwgen
+Example:
+> zigpwgen -p w.w.w.w -n 3
+
+Output:
+
+krooll.knifyes.ilwage.ecimum
+aftiga.faried.urremb.dashin
+ovalth.kimpon.stinsi.grogic
+
+-----------------------------------------------------------------------------------------
+author: Francesco Alemanno <francescolemanno710@gmail.com>
+repo:   https://github.com/francescoalemanno/zigpwgen
 ```
 
 # License
