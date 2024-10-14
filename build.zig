@@ -3,7 +3,7 @@ const std = @import("std");
 // Although this function looks imperative, note that its job is to
 // declaratively construct a build graph that will be executed by an external
 // runner.
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -66,20 +66,42 @@ pub fn build(b: *std.Build) void {
 
     const exe_sync_readme = b.addExecutable(.{
         .name = "sync-readme",
-        .root_source_file = b.path("src/sync_readme.zig"),
+        .root_source_file = b.path("sync_readme.zig"),
         .target = target,
         .optimize = optimize,
     });
 
-    // This declares intent for the executable to be installed into the
-    // standard location when the user invokes the "install" step (the default
-    // step when running `zig build`).
-    b.installArtifact(exe_sync_readme);
-
-    // This *creates* a Run step in the build graph, to be executed when another
-    // step is evaluated that depends on it. The next line below will establish
-    // such a dependency.
-    const run_sync_readme = b.addRunArtifact(exe_sync_readme);
     const step_sync_readme = b.step("sync-readme", "Run the app");
+    const run_sync_readme = b.addRunArtifact(exe_sync_readme);
     step_sync_readme.dependOn(&run_sync_readme.step);
+
+    const cross_step = b.step("cross-compile", "Install executable for all targets");
+
+    for (TARGETS) |TARGET| {
+        const name = try std.fmt.allocPrint(b.allocator, "{s}-{s}", .{
+            @tagName(TARGET.cpu_arch.?),
+            @tagName(TARGET.os_tag.?),
+        });
+
+        const exec = b.addExecutable(.{
+            .name = name,
+            .target = b.resolveTargetQuery(TARGET),
+            .optimize = optimize,
+            .root_source_file = b.path("src/main.zig"),
+        });
+
+        const exe_install = b.addInstallArtifact(exec, .{});
+        cross_step.dependOn(&exe_install.step);
+    }
 }
+
+const TARGETS = [_]std.Target.Query{
+    .{ .cpu_arch = .x86_64, .os_tag = .linux },
+    .{ .cpu_arch = .x86_64, .os_tag = .macos },
+    .{ .cpu_arch = .x86_64, .os_tag = .windows },
+    .{ .cpu_arch = .aarch64, .os_tag = .linux },
+    .{ .cpu_arch = .aarch64, .os_tag = .macos },
+    .{ .cpu_arch = .aarch64, .os_tag = .windows },
+    .{ .cpu_arch = .wasm64, .os_tag = .wasi },
+    .{ .cpu_arch = .wasm32, .os_tag = .wasi },
+};

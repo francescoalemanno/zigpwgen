@@ -43,7 +43,7 @@ pub fn main() !void {
 
     const out = alist.writer();
     out.writeAll(beg_readme) catch unreachable;
-    @import("main.zig").format_help(out) catch unreachable;
+    @import("src/main.zig").format_help(out) catch unreachable;
     out.writeAll(beg_end) catch unreachable;
 
     const file = try std.fs.cwd().createFile(

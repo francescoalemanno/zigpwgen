@@ -34,6 +34,10 @@ fn matches_cli_opt(option: string, cli_arg: string) bool {
 }
 
 pub fn main() !void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
+
     //Prepare buffered writer
     const stdout_file = std.io.getStdOut().writer();
     var bw = std.io.bufferedWriter(stdout_file);
@@ -47,8 +51,8 @@ pub fn main() !void {
     var chacha = std.Random.ChaCha.init(seed);
     const rand = chacha.random();
     //Get args iterator
-    var arg_iter = std.process.args();
-
+    var arg_iter = try std.process.argsWithAllocator(allocator);
+    defer arg_iter.deinit();
     var number_of_passwords: usize = default_number_of_passwords;
     var pattern: []const u8 = default_pattern;
     var print_entropy: bool = default_print_entropy;
