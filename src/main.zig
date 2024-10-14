@@ -4,7 +4,31 @@ const default_pattern = "W-w-w-w-ds";
 const default_print_entropy = false;
 const default_number_of_passwords = 5;
 const string = []const u8;
-
+pub fn format_help(writer: anytype) !void {
+    try std.fmt.format(writer,
+        \\Usage: zigpwgen [-p <pattern>] [-n <num>] [-e]
+        \\
+        \\Flexible password generator using the EFF long word list for pronounceable words. 
+        \\Built with Zig for performance and simplicity.
+        \\
+        \\Options:
+        \\  -p, --pattern     string representing the desired structure of the generated passphrases,
+        \\                    defaults to `{s}` (w = word; t = token; s = symbol; d = digit).
+        \\
+        \\  -n, --num         number of passphrases to generate,
+        \\                    defaults to {}.
+        \\
+        \\  -e, --entropy     print entropy in base log2 along with the generated password,
+        \\                    defaults to {?}.
+        \\                    
+        \\  --help            display usage information
+        \\
+        \\  -----------------------------------------------------------------------------------------
+        \\  author: Francesco Alemanno <francescolemanno710@gmail.com>.
+        \\  repo:   https://github.com/francescoalemanno/zigpwgen
+        \\
+    , .{ default_pattern, default_number_of_passwords, default_print_entropy });
+}
 fn matches_cli_opt(option: string, cli_arg: string) bool {
     return std.mem.eql(u8, cli_arg, option[1..3]) or std.mem.eql(u8, cli_arg, option);
 }
@@ -41,29 +65,7 @@ pub fn main() !void {
         } else if (matches_cli_opt("--entropy", arg)) {
             print_entropy = true;
         } else if (matches_cli_opt("--help", arg)) {
-            try stdout.print(
-                \\Usage: zigpwgen [-p <pattern>] [-n <num>] [-e]
-                \\
-                \\Flexible password generator using the EFF long word list for pronounceable words. 
-                \\Built with Zig for performance and simplicity.
-                \\
-                \\Options:
-                \\  -p, --pattern     string representing the desired structure of the generated passphrases,
-                \\                    defaults to `{s}` (w = word; t = token; s = symbol; d = digit).
-                \\
-                \\  -n, --num         number of passphrases to generate,
-                \\                    defaults to {}.
-                \\
-                \\  -e, --entropy     print entropy in base log2 along with the generated password,
-                \\                    defaults to {?}.
-                \\                    
-                \\  --help            display usage information
-                \\
-                \\  -----------------------------------------------------------------------------------------
-                \\  author: Francesco Alemanno <francescolemanno710@gmail.com>.
-                \\  repo:   https://github.com/francescoalemanno/zigpwgen
-                \\
-            , .{ default_pattern, default_number_of_passwords, default_print_entropy });
+            try format_help(stdout);
             return;
         }
     }

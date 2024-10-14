@@ -63,4 +63,23 @@ pub fn build(b: *std.Build) void {
     // running the unit tests.
     const test_step = b.step("test", "Run unit tests");
     test_step.dependOn(&run_exe_unit_tests.step);
+
+    const exe_sync_readme = b.addExecutable(.{
+        .name = "sync-readme",
+        .root_source_file = b.path("src/sync_readme.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    // This declares intent for the executable to be installed into the
+    // standard location when the user invokes the "install" step (the default
+    // step when running `zig build`).
+    b.installArtifact(exe_sync_readme);
+
+    // This *creates* a Run step in the build graph, to be executed when another
+    // step is evaluated that depends on it. The next line below will establish
+    // such a dependency.
+    const run_sync_readme = b.addRunArtifact(exe_sync_readme);
+    const step_sync_readme = b.step("sync-readme", "Run the app");
+    step_sync_readme.dependOn(&run_sync_readme.step);
 }

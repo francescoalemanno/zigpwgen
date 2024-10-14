@@ -22,52 +22,30 @@ zig build -Doptimize=ReleaseFast
 ### Command Syntax
 
 ```sh
-zigpwgen [-p <pattern>] [-n <num>]
+Usage: zigpwgen [-p <pattern>] [-n <num>] [-e]
+
+Flexible password generator using the EFF long word list for pronounceable words. 
+Built with Zig for performance and simplicity.
+
+Options:
+  -p, --pattern     string representing the desired structure of the generated passphrases,
+                    defaults to `W-w-w-w-ds` (w = word; t = token; s = symbol; d = digit).
+
+  -n, --num         number of passphrases to generate,
+                    defaults to 5.
+
+  -e, --entropy     print entropy in base log2 along with the generated password,
+                    defaults to false.
+                    
+  --help            display usage information
+
+  -----------------------------------------------------------------------------------------
+  author: Francesco Alemanno <francescolemanno710@gmail.com>.
+  repo:   https://github.com/francescoalemanno/zigpwgen
 ```
 
-### Options
+# License
 
-- `-p, --pattern <pattern>`  
-  Defines the structure of the generated passphrases. The default pattern is `w.w.w.ddss`.  
-  - `W` - a pseudo-word (uppercase)
-  - `w` - a pseudo-word (lowercase)
-  - `t` - a token (lowercase)
-  - `T` - a token (starting with an uppercase letter)
-  - `s` - a symbol (e.g., `!`, `$`, `%`)
-  - `d` - a digit (0-9)
+MIT License
 
-- `-n, --num <num>`  
-  Specifies the number of passphrases to generate. Default is `5`.
-
-- `--help`  
-  Displays usage information.
-
-### Example
-
-To generate 3 passwords with a custom pattern:
-
-```sh
-zigpwgen -p "Tt.ss.dd" -n 3
-```
-
-This generates three passphrases where:
-- `T` starts with an uppercase token,
-- `t` is a lowercase token,
-- `s` is a symbol, and
-- `d` is a digit.
-
-### Default Pattern
-
-If no pattern is provided, the default pattern `w.w.w.ddss` is used, which produces three words, followed by two digits and two symbols. For example:
-
-```
-apple.banana.orange.42$%
-```
-
-### Help
-
-For a full list of options and usage, use:
-
-```sh
-zigpwgen --help
-```
+Copyright (c) 2024 Francesco Alemanno
