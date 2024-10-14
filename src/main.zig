@@ -1,55 +1,75 @@
 const std = @import("std");
 const sampler = @import("sampler.zig");
+const default_pattern = "W-w-w-w-ds";
+const default_print_entropy = false;
+const default_number_of_passwords = 5;
+const string = []const u8;
+
+fn matches_cli_opt(option: string, cli_arg: string) bool {
+    return std.mem.eql(u8, cli_arg, option[1..3]) or std.mem.eql(u8, cli_arg, option);
+}
 
 pub fn main() !void {
+    //Prepare buffered writer
     const stdout_file = std.io.getStdOut().writer();
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
     defer {
-        // stdout.print("hallo!", .{}) catch unreachable;
         bw.flush() catch unreachable;
     }
+    //Prepare CSPRNG
     var seed = [1]u8{0} ** std.Random.ChaCha.secret_seed_length;
     try std.posix.getrandom(&seed);
     var chacha = std.Random.ChaCha.init(seed);
     const rand = chacha.random();
-    var n: usize = 5;
-    var p: []const u8 = "w.w.w.ddss";
+    //Get args iterator
     var arg_iter = std.process.args();
-    var print_entropy: bool = false;
+
+    var number_of_passwords: usize = default_number_of_passwords;
+    var pattern: []const u8 = default_pattern;
+    var print_entropy: bool = default_print_entropy;
+
     while (arg_iter.next()) |arg| {
-        if (std.mem.eql(u8, arg, "-n") or std.mem.eql(u8, arg, "--num")) {
+        if (matches_cli_opt("--num", arg)) {
             if (arg_iter.next()) |ns| {
-                n = try std.fmt.parseInt(usize, ns, 10);
+                number_of_passwords = try std.fmt.parseInt(usize, ns, 10);
             }
-        } else if (std.mem.eql(u8, arg, "-p") or std.mem.eql(u8, arg, "--pattern")) {
+        } else if (matches_cli_opt("--pattern", arg)) {
             if (arg_iter.next()) |ps| {
-                p = ps;
+                pattern = ps;
             }
-        } else if (std.mem.eql(u8, arg, "-e") or std.mem.eql(u8, arg, "--entropy")) {
+        } else if (matches_cli_opt("--entropy", arg)) {
             print_entropy = true;
-        } else if (std.mem.eql(u8, arg, "-h") or std.mem.eql(u8, arg, "--help")) {
+        } else if (matches_cli_opt("--help", arg)) {
             try stdout.print(
-                \\Usage: zigpwgen [-p <pattern>] [-n <num>]
+                \\Usage: zigpwgen [-p <pattern>] [-n <num>] [-e]
                 \\
-                \\Flexible password generator with pronounceable words based on EFF long word list and Zig.
+                \\Flexible password generator using the EFF long word list for pronounceable words. 
+                \\Built with Zig for performance and simplicity.
                 \\
                 \\Options:
-                \\  -p, --pattern     string representing the desired structure of the generated
-                \\                    passphrases, default is `w.w.w.ddss` (w = word; t = token; s = symbol; d = digit).
+                \\  -p, --pattern     string representing the desired structure of the generated passphrases,
+                \\                    defaults to `{s}` (w = word; t = token; s = symbol; d = digit).
                 \\
-                \\  -n, --num         number of passphrases to generate, must be a positive integer.
+                \\  -n, --num         number of passphrases to generate,
+                \\                    defaults to {}.
                 \\
-                \\  -e, --entropy     print entropy in base log2 along with the generated password.
+                \\  -e, --entropy     print entropy in base log2 along with the generated password,
+                \\                    defaults to {?}.
                 \\                    
                 \\  --help            display usage information
-                \\            
-            , .{});
+                \\
+                \\  -----------------------------------------------------------------------------------------
+                \\  author: Francesco Alemanno <francescolemanno710@gmail.com>.
+                \\  repo:   https://github.com/francescoalemanno/zigpwgen
+                \\
+            , .{ default_pattern, default_number_of_passwords, default_print_entropy });
             return;
         }
     }
-    for (0..n) |_| {
-        const entropy = try sampler.genfrompattern(rand, stdout, p);
+
+    for (0..number_of_passwords) |_| {
+        const entropy = try sampler.genfrompattern(rand, stdout, pattern);
         if (print_entropy) try stdout.print("   {d:.2}", .{entropy});
         try stdout.writeByte('\n');
     }
