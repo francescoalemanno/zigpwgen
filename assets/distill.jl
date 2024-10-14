@@ -23,7 +23,8 @@ V = [(k, join(filter(!=(""),collect(v)|>sort),";")) for (k,v) in data]
 V = V[sortperm(V)]
 open("src/lib.zig", "w") do io 
 println(io,"const std = @import(\"std\");
-const string = []const u8;
+pub const string = []const u8;
+pub const chain_depth: usize = $(depth);
 pub const map = std.StaticStringMap([]const string).initComptime(.{")
 for v in V
     toks = split(v[2],";");
