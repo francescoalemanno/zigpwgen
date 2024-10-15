@@ -1,10 +1,10 @@
 const std = @import("std");
 const sampler = @import("sampler.zig");
-const default_pattern = "W-w-w-w-ds";
+const default_pattern = "W-w-w-ds";
 const default_print_entropy = false;
 const default_number_of_passwords = 5;
 const string = []const u8;
-pub const VERSION = "v0.0.5";
+pub const VERSION = "v0.0.6";
 fn run_main(stdout: anytype, number_of_passwords: usize, pattern: string, print_entropy: bool) !void {
     //Prepare CSPRNG
     var seed = [1]u8{0} ** std.Random.ChaCha.secret_seed_length;
@@ -28,7 +28,7 @@ pub fn format_help(writer: anytype) !void {
         \\
         \\Options:
         \\  -p, --pattern     string representing the desired structure of the generated passphrases,
-        \\                    defaults to `{s}` (w = word; t = token; s = symbol; d = digit).
+        \\                    defaults to `{s}` (w = word; W = capital word; s = symbol; d = digit).
         \\
         \\  -n, --num         number of passphrases to generate,
         \\                    defaults to {}.
@@ -39,14 +39,23 @@ pub fn format_help(writer: anytype) !void {
         \\  -h, --help        display usage information
         \\  -v, --version     display version information
         \\
-        \\Example:
-        \\> zigpwgen -p w.w.w.w -n 3
-        \\
-        \\Output:
-        \\
-        \\
     , .{ default_pattern, default_number_of_passwords, default_print_entropy });
-    try run_main(writer, 3, "w.w.w.w", default_print_entropy);
+    inline for (
+        .{ "w.w.w.w", "W-W-dd" },
+        .{ 3, 4 },
+    ) |pat, num| {
+        try std.fmt.format(writer,
+            \\
+            \\-- Example:
+            \\
+            \\> zigpwgen -p {s} -n {d}
+            \\
+            \\- output:
+            \\
+            \\
+        , .{ pat, num });
+        try run_main(writer, num, pat, default_print_entropy);
+    }
     try std.fmt.format(writer,
         \\
         \\-----------------------------------------------------------------------------------------

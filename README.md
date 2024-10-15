@@ -17,7 +17,7 @@ cd zigpwgen
 zig build -Doptimize=ReleaseFast
 ```
 
-or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.5).
+or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.6).
 
 ## Usage
 
@@ -31,7 +31,7 @@ Built with Zig for performance and simplicity.
 
 Options:
   -p, --pattern     string representing the desired structure of the generated passphrases,
-                    defaults to `W-w-w-w-ds` (w = word; t = token; s = symbol; d = digit).
+                    defaults to `W-w-w-ds` (w = word; W = capital word; s = symbol; d = digit).
 
   -n, --num         number of passphrases to generate,
                     defaults to 5.
@@ -42,14 +42,26 @@ Options:
   -h, --help        display usage information
   -v, --version     display version information
 
-Example:
+-- Example:
+
 > zigpwgen -p w.w.w.w -n 3
 
-Output:
+- output:
 
-joyles.ibupto.udiocy.gonymak
-igglegw.feript.sprock.ahoyag
-avestf.agragr.yongruf.uditmu
+pampan.nutmerned.zansows.cifrache
+migzicle.cexfit.zitdant.jervelf
+jagfal.ruzzal.sodded.vincarger
+
+-- Example:
+
+> zigpwgen -p W-W-dd -n 4
+
+- output:
+
+Linkerbox-Natnense-93
+Lamnort-Rircows-70
+Banlox-Fadnath-20
+Zepdown-Duprass-03
 
 -----------------------------------------------------------------------------------------
 author: Francesco Alemanno <francesco.alemanno.710@gmail.com>
