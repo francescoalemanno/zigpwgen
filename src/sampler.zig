@@ -9,7 +9,7 @@ fn Entropy(token_type: type) type {
     };
 }
 
-fn sample_symb(rand: std.Random, symbols: anytype) Entropy(@TypeOf(symbols[0])) {
+fn sample_symb(T: type, rand: std.Random, symbols: []const T) Entropy(T) {
     return .{
         .token = symbols[rand.uintLessThan(usize, symbols.len)],
         .entropy = std.math.log2(@as(f64, @floatFromInt(symbols.len))),
@@ -30,7 +30,7 @@ pub fn genfrompattern(rand: std.Random, writer: anytype, pattern: string) !f64 {
         }
         if (c == 'w' or c == 'W') {
             inline for (0.., .{ lib.a_c, lib.a_v, lib.a_cc, lib.a_tail }) |i, S| {
-                const sc_ent = sample_symb(rand, S);
+                const sc_ent = sample_symb(string, rand, &S);
                 const sc = sc_ent.token;
                 entropy += sc_ent.entropy;
                 if (i == 0 and c == 'W') {
@@ -42,7 +42,7 @@ pub fn genfrompattern(rand: std.Random, writer: anytype, pattern: string) !f64 {
             }
         } else if (c == 's' or c == 'd') {
             const symbs = if (c == 's') "!$%&/=?^#*+@;>|:" else "1234567890";
-            const sc_ent = sample_symb(rand, symbs);
+            const sc_ent = sample_symb(u8, rand, symbs);
             const sc = sc_ent.token;
             entropy += sc_ent.entropy;
             try writer.writeByte(sc);
