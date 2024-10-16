@@ -17,7 +17,7 @@ cd zigpwgen
 zig build -Doptimize=ReleaseFast
 ```
 
-or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.6).
+or download one of the [precompiled release binaries](https://github.com/francescoalemanno/zigpwgen/releases/tag/v0.0.7).
 
 ## Usage
 
@@ -48,9 +48,9 @@ Options:
 
 - output:
 
-pampan.nutmerned.zansows.cifrache
-migzicle.cexfit.zitdant.jervelf
-jagfal.ruzzal.sodded.vincarger
+jumnetion.pegmelf.dinhosure.vewwene
+mobjering.pordipe.noclarita.hummern
+jegmue.konhume.warpost.sotmative
 
 -- Example:
 
@@ -58,10 +58,10 @@ jagfal.ruzzal.sodded.vincarger
 
 - output:
 
-Linkerbox-Natnense-93
-Lamnort-Rircows-70
-Banlox-Fadnath-20
-Zepdown-Duprass-03
+Tatzight-Wustoil-54
+Doggiarch-Vuntoses-86
+Botbaw-Cixtosive-44
+Borkandle-Vegber-98
 
 -----------------------------------------------------------------------------------------
 author: Francesco Alemanno <francesco.alemanno.710@gmail.com>
